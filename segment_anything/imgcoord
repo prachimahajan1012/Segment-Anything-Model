@@ -1,0 +1,50 @@
+import matplotlib.pyplot as plt
+from PIL import Image
+import numpy as np
+
+# Load the image using Pillow
+image_path ='C:/Users/pmn27/Downloads/01.JPG'
+image = Image.open(image_path)
+image = np.array(image)
+
+# Global variable to store the coordinates
+selected_coords = []
+
+# Function to handle mouse movements
+def on_hover(event):
+    if event.inaxes:
+        x, y = int(event.xdata), int(event.ydata)
+        
+
+# Function to handle mouse clicks
+def on_click(event):
+    if event.inaxes:
+        x, y = int(event.xdata), int(event.ydata)
+        selected_coords.clear()
+        selected_coords.append((x, y))
+        print(f"Selected pixel: {x}, {y}")
+        
+        # Plot the selected point
+        ax.scatter(x, y, color='green', marker='.', s=100, edgecolor='white', linewidth=1.25)
+        fig.canvas.draw()
+
+# Create the plot
+fig, ax = plt.subplots()
+ax.imshow(image)
+
+# Connect the event handlers
+fig.canvas.mpl_connect('motion_notify_event', on_hover)
+fig.canvas.mpl_connect('button_press_event', on_click)
+
+plt.show()
+
+# After the plot is closed, you can check the selected coordinates
+print(f"Selected coordinates: {selected_coords}")
+
+if selected_coords:
+    # Convert the selected coordinates to a numpy array
+    input_point = np.array([selected_coords[0]])
+    print(f"Selected x: {input_point[0, 0]}, y: {input_point[0, 1]}")
+    print(input_point)
+else:
+    print("No coordinates selected.")
